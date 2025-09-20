@@ -35,7 +35,7 @@ sequenceDiagram
 5. Merchant server displays the payment page to the customer and provides payment guidance.
 6. Customer transfers cryptocurrency to the specified wallet address.
 7. When the transaction is recorded on the network block, a transaction is created and delivered to the merchant.
-8. When network confirmation is completed, the transaction is finalized and payment completion status is delivered via webhook.  
+8. When network confirmation is completed, the transaction is finalized and payment completion status is delivered via webhook.
 
 ---
 
@@ -52,7 +52,7 @@ sequenceDiagram
 
    **Example (curl):**
    ```bash
-   curl -X GET "https://api.crypted-pay.io/invoices"      
+   curl -X GET "https://api.crypted-pay.io/invoices"
    -H "Authorization: <YOUR_API_KEY>"
    ```
 
@@ -132,4 +132,4 @@ To receive issued invoice and transaction progress information, **callback URL r
 
 ## Next Steps
 
-- Follow the [Quick Flow](./quickflow.md) guide
+- Follow the [Quick Flow](./quickflow) guide

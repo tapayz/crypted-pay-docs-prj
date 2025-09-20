@@ -1,12 +1,12 @@
-# Quick Flow
+# 빠른 절차 (Quick Flow)
 
-This document provides a minimal procedure guide for developers new to the API to quickly experience the end-to-end flow.
+이 문서는 API를 처음 사용하는 개발자가 빠르게 엔드투엔드(End-to-End) 흐름을 경험할 수 있도록 최소한의 절차를 안내합니다.
 
 ---
 
-## 1. API Key Setup
+## 1. API Key 설정.
 
-You must include the API key in the `Authorization` header for all API calls.
+모든 API 호출 시 `Authorization` 헤더에 포함해야 합니다.
 
 ```http
 Authorization: <YOUR_API_KEY>
@@ -14,9 +14,9 @@ Authorization: <YOUR_API_KEY>
 
 ---
 
-## 2. Coin Price Inquiry
+## 2. 코인 시세 조회
 
-You can check the real-time prices of currently supported cryptocurrencies (with/without fees applied).
+현재 지원하는 암호화폐의 실시간 시세(수수료 적용/미적용)를 조회할 수 있습니다.
 
 **Request**
 
@@ -47,9 +47,9 @@ Authorization: <YOUR_API_KEY>
 
 ---
 
-## 3. Customer Creation
+## 3. 고객 생성
 
-To use the service, you must first create a customer.
+서비스를 이용하기 위해서는 반드시 고객을 먼저 생성해야 합니다.
 
 **Request**
 
@@ -83,9 +83,9 @@ Content-Type: application/json
 
 ---
 
-## 4. Invoice Issuance
+## 4. 인보이스 발행
 
-Issue a payment invoice to a registered customer.
+등록된 고객에게 결제 인보이스를 발행합니다.
 
 **Request**
 
@@ -121,16 +121,16 @@ Content-Type: application/json
 }
 ```
 
-👉 The customer accesses the `url` to proceed with payment.
+👉 고객은 `url` 로 접속해 결제를 진행합니다.
 
 ---
 
-## 5. Webhook Processing
+## 5. Webhook 처리
 
-When payment is completed, a Webhook event is sent to the server.
-The server must receive, verify, and update the payment status accordingly.
+결제가 완료되면, 서버로 Webhook 이벤트가 전달됩니다.  
+서버는 이를 수신하고 검증하여 결제 상태를 업데이트해야 합니다.
 
-**Webhook update-transaction Example**
+**Webhook update-transaction 예시**
 
 ```json
 {
@@ -141,19 +141,19 @@ The server must receive, verify, and update the payment status accordingly.
 }
 ```
 
-**Server Example (Node.js / Express)**
+**서버 예제 (Node.js / Express)**
 
 ```javascript
 app.post("/update-transaction", (req, res) => {
   const payload = req.body;
 
-  // 1. Signature verification
+  // 1. 시그니처 검증
   verifySignature(payload, req.headers["x-signature"]);
 
-  // 2. Event processing
+  // 2. 이벤트 처리
   if (payload.state === "Completed") {
-    console.log("Payment completed:", payload.amount);
-    // DB update and other processing
+    console.log("결제 완료:", payload.amount);
+    // DB 업데이트 등 처리
   }
 
   res.sendStatus(200);
@@ -162,13 +162,13 @@ app.post("/update-transaction", (req, res) => {
 
 ---
 
-## Summary
+## 요약
 
-1. API Key Setup
-2. Price Inquiry
-3. Customer Creation
-4. Invoice Issuance
-5. Webhook Processing
+1. API Key 설정.  
+2. 시세 조회
+3. 고객 생성  
+4. 인보이스 발행  
+5. Webhook 처리  
 
-By following this procedure, you can quickly experience the actual payment flow.
-Please refer to the **API Reference** for detailed endpoint descriptions.
+이 절차를 따라 하면 실제 결제 흐름을 빠르게 체험할 수 있습니다.  
+자세한 엔드포인트 설명은 **API Reference**를 참고하세요.

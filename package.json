@@ -1,0 +1,32 @@
+{
+  "name": "crypted-pay-docs",
+  "version": "1.0.0",
+  "description": "Crypted-Pay API Documentation with VitePress",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs --port 5000",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs --port 5000",
+    "serve": "vitepress serve docs --port 5000"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0-rc.31",
+    "vue": "^3.3.8"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tapayz/crypted-pay-docs"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "payment",
+    "api",
+    "documentation",
+    "vitepress"
+  ],
+  "author": "TapayZ",
+  "license": "MIT"
+}
