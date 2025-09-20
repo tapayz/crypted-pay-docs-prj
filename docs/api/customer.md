@@ -15,9 +15,9 @@ Authorization: <YOUR_API_KEY>
 
 > **Path Parameters**
 
-|Parameter|Type|Required|Description|
-|---|---|---|---|
-|`name`|string|✅|Customer name|
+| Parameter | Type   | Required | Description   |
+| --------- | ------ | -------- | ------------- |
+| `name`    | string | ✅       | Customer name |
 
 ### Response
 
@@ -38,16 +38,16 @@ Authorization: <YOUR_API_KEY>
 
 > **Response Field Description**
 
-|Field|Type|Description|
-|---|---|---|
-|`id`|string|Customer unique ID (CUID)|
-|`partnerId`|string|Partner ID|
-|`name`|string|Customer name|
-|`icon`|string|Customer icon URL|
-|`country`|string|Country code|
-|`idCode`|string|Hierarchical structure identifier|
-|`isActive`|boolean|Active status|
-|`isHidden`|boolean|Hidden status|
+| Field       | Type    | Description                       |
+| ----------- | ------- | --------------------------------- |
+| `id`        | string  | Customer unique ID (CUID)         |
+| `partnerId` | string  | Partner ID                        |
+| `name`      | string  | Customer name                     |
+| `icon`      | string  | Customer icon URL                 |
+| `country`   | string  | Country code                      |
+| `idCode`    | string  | Hierarchical structure identifier |
+| `isActive`  | boolean | Active status                     |
+| `isHidden`  | boolean | Hidden status                     |
 
 ---
 
@@ -64,14 +64,14 @@ Authorization: <YOUR_API_KEY>
 
 > **Query Parameters**
 
-|Parameter|Type|Required|Description|
-|---|---|---|---|
-|`searchType`|string|❌|Search type (`name`, `email`, `phone`, `id`)|
-|`search`|string|❌|Search term|
-|`sortKey`|string|❌|Sort criteria (`name`, `createdAt`, `updatedAt`)|
-|`sortType`|string|❌|Sort direction (`asc`, `desc`)|
-|`page`|number|❌|Page number (default: 1)|
-|`size`|number|❌|Page size (default: 10)|
+| Parameter    | Type   | Required | Description                                      |
+| ------------ | ------ | -------- | ------------------------------------------------ |
+| `searchType` | string | ❌       | Search type (`name`, `email`, `phone`, `id`)     |
+| `search`     | string | ❌       | Search term                                      |
+| `sortKey`    | string | ❌       | Sort criteria (`name`, `createdAt`, `updatedAt`) |
+| `sortType`   | string | ❌       | Sort direction (`asc`, `desc`)                   |
+| `page`       | number | ❌       | Page number (default: 1)                         |
+| `size`       | number | ❌       | Page size (default: 10)                          |
 
 ### Response
 
@@ -121,9 +121,9 @@ Authorization: <YOUR_API_KEY>
 
 > **Query Parameters**
 
-|Parameter|Type|Required|Description|
-|---|---|---|---|
-|`targetId`|string|✅|Customer ID|
+| Parameter  | Type   | Required | Description |
+| ---------- | ------ | -------- | ----------- |
+| `targetId` | string | ✅       | Customer ID |
 
 ### Response
 
@@ -237,10 +237,10 @@ Content-Type: application/json
 
 > **Contact Types**
 
-|Type|Description|
-|---|---|
-|`EMAIL`|Email address|
-|`PHONE`|Phone number|
+| Type    | Description   |
+| ------- | ------------- |
+| `EMAIL` | Email address |
+| `PHONE` | Phone number  |
 
 ---
 
@@ -286,48 +286,63 @@ Content-Type: application/json
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.io';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // Create customer
 async function createCustomer(name) {
   try {
-    const response = await axios.post(`${BASE_URL}/customer/create/${encodeURIComponent(name)}`, {}, {
-      headers: {
-        'Authorization': API_KEY
+    const response = await axios.post(
+      `${BASE_URL}/customer/create/${encodeURIComponent(name)}`,
+      {},
+      {
+        headers: {
+          Authorization: API_KEY,
+        },
       }
-    });
+    );
 
-    console.log('Customer created:', response.data);
+    console.log("Customer created:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Customer creation failed:', error.response?.data || error.message);
+    console.error(
+      "Customer creation failed:",
+      error.response?.data || error.message
+    );
   }
 }
 
 // Get customer list
-async function getCustomerList(searchType = '', search = '', page = 1, size = 10) {
+async function getCustomerList(
+  searchType = "",
+  search = "",
+  page = 1,
+  size = 10
+) {
   try {
     const response = await axios.get(`${BASE_URL}/customer`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
         searchType,
         search,
-        sortKey: 'createdAt',
-        sortType: 'desc',
+        sortKey: "createdAt",
+        sortType: "desc",
         page,
-        size
-      }
+        size,
+      },
     });
 
     console.log(`Total ${response.data.total} customers`);
     return response.data;
   } catch (error) {
-    console.error('Customer list query failed:', error.response?.data || error.message);
+    console.error(
+      "Customer list query failed:",
+      error.response?.data || error.message
+    );
   }
 }
 ```

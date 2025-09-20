@@ -1,10 +1,10 @@
 # API Reference
 
-You can build cryptocurrency payment systems using the Crypted-Pay API.
+You can build cryptocurrency payment systems using the Tapayz API.
 
 ## API Overview
 
-- **Base URL**: `https://api.crypted-pay.io`
+- **Base URL**: `https://api.crypted-pay.com`
 - **Authentication**: API Key (Authorization header)
 - **Response Format**: JSON
 - **HTTPS Required**: All APIs are accessible only through HTTPS
@@ -20,16 +20,19 @@ Authorization: YOUR_API_KEY
 ## API List
 
 ### Price API
+
 Query real-time cryptocurrency prices and asset information.
 
 - [Price API](./price) - Real-time prices and asset lists
 
 ### Customer Management API
+
 Create, query, and manage customers using the payment service.
 
 - [Customer Management API](./customer) - Customer CRUD and contact management
 
 ### Invoice API
+
 Issue, query, and manage invoices for cryptocurrency payments.
 
 - [Invoice API](./invoice) - Payment request issuance and management
@@ -37,6 +40,7 @@ Issue, query, and manage invoices for cryptocurrency payments.
 ## Response Format
 
 ### Success Response
+
 ```json
 {
   "data": {
@@ -46,6 +50,7 @@ Issue, query, and manage invoices for cryptocurrency payments.
 ```
 
 ### Error Response
+
 ```json
 {
   "statusCode": 400,

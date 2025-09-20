@@ -30,17 +30,17 @@ Content-Type: application/json
 
 > [!note] 요청 필드 설명
 
-|필드|타입|필수|설명|
-|---|---|---|---|
-|`customerName`|string|✅|고객 이름 (고객이 없으면 자동 생성)|
-|`title`|string|✅|인보이스 제목|
-|`amount`|string|✅|클라이언트가 계산한 예상 암호화폐 수량|
-|`stdPrice`|string|✅|요청 시점의 환율|
-|`cashAssetId`|number|✅|법정화폐 자산 ID (1: KRW, 2: USD)|
-|`cashAmount`|string|✅|법정화폐 금액|
-|`cryptoAssetId`|number|✅|암호화폐 자산 ID|
-|`expiredDate`|number|✅|만료 시간 (초 단위)|
-|`isNewAddress`|boolean|❌|새 지갑 주소 생성 여부 (기본값: false)|
+| 필드            | 타입    | 필수 | 설명                                   |
+| --------------- | ------- | ---- | -------------------------------------- |
+| `customerName`  | string  | ✅   | 고객 이름 (고객이 없으면 자동 생성)    |
+| `title`         | string  | ✅   | 인보이스 제목                          |
+| `amount`        | string  | ✅   | 클라이언트가 계산한 예상 암호화폐 수량 |
+| `stdPrice`      | string  | ✅   | 요청 시점의 환율                       |
+| `cashAssetId`   | number  | ✅   | 법정화폐 자산 ID (1: KRW, 2: USD)      |
+| `cashAmount`    | string  | ✅   | 법정화폐 금액                          |
+| `cryptoAssetId` | number  | ✅   | 암호화폐 자산 ID                       |
+| `expiredDate`   | number  | ✅   | 만료 시간 (초 단위)                    |
+| `isNewAddress`  | boolean | ❌   | 새 지갑 주소 생성 여부 (기본값: false) |
 
 ### 응답
 
@@ -73,12 +73,12 @@ Content-Type: application/json
       "network": "LEGAL"
     }
   },
-  "url": "https://pay.crypted-pay.io/550e8400-e29b-41d4-a716-446655440000"
+  "url": "https://pay.tapayz.io/550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
 > [!tip] 성공 응답
-> 
+>
 > - `invoice`: 생성된 인보이스 정보
 > - `url`: 고객이 결제를 진행할 수 있는 결제 페이지 URL
 
@@ -97,13 +97,13 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 쿼리 파라미터
 
-|파라미터|타입|필수|설명|
-|---|---|---|---|
-|`page`|number|❌|페이지 번호 (기본값: 1)|
-|`size`|number|❌|페이지 크기 (기본값: 10)|
-|`startAt`|string|❌|시작 날짜 (ISO 8601)|
-|`endAt`|string|❌|종료 날짜 (ISO 8601)|
-|`customerName`|string|❌|고객 이름으로 필터링|
+| 파라미터       | 타입   | 필수 | 설명                     |
+| -------------- | ------ | ---- | ------------------------ |
+| `page`         | number | ❌   | 페이지 번호 (기본값: 1)  |
+| `size`         | number | ❌   | 페이지 크기 (기본값: 10) |
+| `startAt`      | string | ❌   | 시작 날짜 (ISO 8601)     |
+| `endAt`        | string | ❌   | 종료 날짜 (ISO 8601)     |
+| `customerName` | string | ❌   | 고객 이름으로 필터링     |
 
 ### 응답
 
@@ -159,9 +159,9 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 쿼리 파라미터
 
-|파라미터|타입|필수|설명|
-|---|---|---|---|
-|`id`|string|✅|인보이스 ID|
+| 파라미터 | 타입   | 필수 | 설명        |
+| -------- | ------ | ---- | ----------- |
+| `id`     | string | ✅   | 인보이스 ID |
 
 ### 응답
 
@@ -220,15 +220,15 @@ Authorization: <YOUR_API_KEY>
 
 ### 상태 값
 
-|상태|설명|
-|---|---|
-|`Ready`|결제 대기 중|
-|`Wait`|처리 대기 중|
-|`Pending`|블록체인 확인 중|
-|`Complete`|결제 완료|
-|`Fail`|결제 실패|
-|`Reject`|결제 거부|
-|`Cancel`|결제 취소 (만료)|
+| 상태       | 설명             |
+| ---------- | ---------------- |
+| `Ready`    | 결제 대기 중     |
+| `Wait`     | 처리 대기 중     |
+| `Pending`  | 블록체인 확인 중 |
+| `Complete` | 결제 완료        |
+| `Fail`     | 결제 실패        |
+| `Reject`   | 결제 거부        |
+| `Cancel`   | 결제 취소 (만료) |
 
 ### 상태 흐름
 
@@ -238,14 +238,14 @@ graph TD
     B --> C[Complete]
     B --> D[Fail]
     A --> E[Cancel]
-    
+
     A --> F[Wait]
     F --> B
     F --> G[Reject]
 ```
 
 > [!info] 상태 설명
-> 
+>
 > - **Ready**: 인보이스가 생성되어 결제 대기 중
 > - **Pending**: 고객이 송금하여 블록체인에서 확인 중
 > - **Complete**: 결제가 성공적으로 완료됨
@@ -335,37 +335,41 @@ graph TD
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.io';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // 인보이스 생성
 async function createInvoice() {
   try {
-    const response = await axios.post(`${BASE_URL}/invoice/create`, {
-      customerName: '김민수',
-      title: 'USDT 10만원 구매',
-      amount: '74.074074',
-      stdPrice: '1350.500000',
-      cashAssetId: 1,
-      cashAmount: '100000.000000',
-      cryptoAssetId: 1001,
-      expiredDate: 1800,
-      isNewAddress: false
-    }, {
-      headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${BASE_URL}/invoice/create`,
+      {
+        customerName: "김민수",
+        title: "USDT 10만원 구매",
+        amount: "74.074074",
+        stdPrice: "1350.500000",
+        cashAssetId: 1,
+        cashAmount: "100000.000000",
+        cryptoAssetId: 1001,
+        expiredDate: 1800,
+        isNewAddress: false,
+      },
+      {
+        headers: {
+          Authorization: API_KEY,
+          "Content-Type": "application/json",
+        },
       }
-    });
-    
-    console.log('인보이스 생성 완료:', response.data.invoice.id);
-    console.log('결제 URL:', response.data.url);
-    
+    );
+
+    console.log("인보이스 생성 완료:", response.data.invoice.id);
+    console.log("결제 URL:", response.data.url);
+
     return response.data;
   } catch (error) {
-    console.error('인보이스 생성 실패:', error.response?.data || error.message);
+    console.error("인보이스 생성 실패:", error.response?.data || error.message);
   }
 }
 
@@ -374,22 +378,25 @@ async function getInvoiceList(page = 1, size = 10) {
   try {
     const response = await axios.get(`${BASE_URL}/invoice`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
         page,
         size,
-        startAt: '2025-09-01T00:00:00.000Z',
-        endAt: '2025-09-05T23:59:59.999Z'
-      }
+        startAt: "2025-09-01T00:00:00.000Z",
+        endAt: "2025-09-05T23:59:59.999Z",
+      },
     });
-    
+
     console.log(`총 ${response.data.total}개의 인보이스`);
-    console.log('인보이스 목록:', response.data.list);
-    
+    console.log("인보이스 목록:", response.data.list);
+
     return response.data;
   } catch (error) {
-    console.error('인보이스 목록 조회 실패:', error.response?.data || error.message);
+    console.error(
+      "인보이스 목록 조회 실패:",
+      error.response?.data || error.message
+    );
   }
 }
 
@@ -398,19 +405,22 @@ async function getInvoiceDetail(invoiceId) {
   try {
     const response = await axios.get(`${BASE_URL}/invoice/detail`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
-        id: invoiceId
-      }
+        id: invoiceId,
+      },
     });
-    
-    console.log('인보이스 상세:', response.data);
-    console.log('지갑 주소:', response.data.wallet.address);
-    
+
+    console.log("인보이스 상세:", response.data);
+    console.log("지갑 주소:", response.data.wallet.address);
+
     return response.data;
   } catch (error) {
-    console.error('인보이스 상세 조회 실패:', error.response?.data || error.message);
+    console.error(
+      "인보이스 상세 조회 실패:",
+      error.response?.data || error.message
+    );
   }
 }
 ```
@@ -422,7 +432,7 @@ import requests
 from datetime import datetime, timedelta
 
 API_KEY = 'your-api-key-here'
-BASE_URL = 'https://api.crypted-pay.io'
+BASE_URL = 'https://api.crypted-pay.com'
 
 headers = {
     'Authorization': API_KEY,
@@ -442,16 +452,16 @@ def create_invoice():
         'expiredDate': 1800,
         'isNewAddress': False
     }
-    
+
     try:
-        response = requests.post(f'{BASE_URL}/invoice/create', 
+        response = requests.post(f'{BASE_URL}/invoice/create',
                                json=payload, headers=headers)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"인보이스 생성 완료: {data['invoice']['id']}")
         print(f"결제 URL: {data['url']}")
-        
+
         return data
     except requests.exceptions.RequestException as e:
         print(f"인보이스 생성 실패: {e}")
@@ -464,16 +474,16 @@ def get_invoice_list(page=1, size=10):
         'startAt': '2025-09-01T00:00:00.000Z',
         'endAt': '2025-09-05T23:59:59.999Z'
     }
-    
+
     try:
-        response = requests.get(f'{BASE_URL}/invoice', 
-                              headers={'Authorization': API_KEY}, 
+        response = requests.get(f'{BASE_URL}/invoice',
+                              headers={'Authorization': API_KEY},
                               params=params)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"총 {data['total']}개의 인보이스")
-        
+
         return data
     except requests.exceptions.RequestException as e:
         print(f"인보이스 목록 조회 실패: {e}")
@@ -484,13 +494,13 @@ def get_invoice_list(page=1, size=10):
 ## ⚡ 주의사항
 
 > [!warning] 중요 사항
-> 
+>
 > 1. **인증 필수**: 모든 API 호출 시 `Authorization` 헤더에 유효한 API 키가 필요합니다.
 > 2. **만료 시간**: 인보이스는 설정한 만료 시간 후 자동으로 `Cancel` 상태가 됩니다.
 > 3. **환율 변동**: `stdPrice`와 실제 처리 시점의 환율 차이로 인해 금액이 조정될 수 있습니다.
 
 > [!tip] 팁
-> 
+>
 > - 고객이 존재하지 않으면 `customerName`으로 자동 생성됩니다.
 > - `isNewAddress: true`로 설정하면 매번 새로운 지갑 주소를 생성합니다.
 > - Webhook을 통해 실시간으로 결제 상태를 확인할 수 있습니다.

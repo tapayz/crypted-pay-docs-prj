@@ -15,9 +15,9 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 경로 파라미터
 
-|파라미터|타입|필수|설명|
-|---|---|---|---|
-|`name`|string|✅|고객 이름|
+| 파라미터 | 타입   | 필수 | 설명      |
+| -------- | ------ | ---- | --------- |
+| `name`   | string | ✅   | 고객 이름 |
 
 ### 응답
 
@@ -38,16 +38,16 @@ Authorization: <YOUR_API_KEY>
 
 > [!tip] 응답 필드 설명
 
-|필드|타입|설명|
-|---|---|---|
-|`id`|string|고객 고유 ID (CUID)|
-|`partnerId`|string|파트너 ID|
-|`name`|string|고객 이름|
-|`icon`|string|고객 아이콘 URL|
-|`country`|string|국가 코드|
-|`idCode`|string|계층 구조 식별자|
-|`isActive`|boolean|활성화 상태|
-|`isHidden`|boolean|숨김 상태|
+| 필드        | 타입    | 설명                |
+| ----------- | ------- | ------------------- |
+| `id`        | string  | 고객 고유 ID (CUID) |
+| `partnerId` | string  | 파트너 ID           |
+| `name`      | string  | 고객 이름           |
+| `icon`      | string  | 고객 아이콘 URL     |
+| `country`   | string  | 국가 코드           |
+| `idCode`    | string  | 계층 구조 식별자    |
+| `isActive`  | boolean | 활성화 상태         |
+| `isHidden`  | boolean | 숨김 상태           |
 
 ---
 
@@ -64,14 +64,14 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 쿼리 파라미터
 
-|파라미터|타입|필수|설명|
-|---|---|---|---|
-|`searchType`|string|❌|검색 유형 (`name`, `email`, `phone`, `id`, ``)|
-|`search`|string|❌|검색어|
-|`sortKey`|string|❌|정렬 기준 (`name`, `createdAt`, `updatedAt`, ``)|
-|`sortType`|string|❌|정렬 방향 (`asc`, `desc`, ``)|
-|`page`|number|❌|페이지 번호 (기본값: 1)|
-|`size`|number|❌|페이지 크기 (기본값: 10)|
+| 파라미터     | 타입   | 필수 | 설명                                             |
+| ------------ | ------ | ---- | ------------------------------------------------ |
+| `searchType` | string | ❌   | 검색 유형 (`name`, `email`, `phone`, `id`, ``)   |
+| `search`     | string | ❌   | 검색어                                           |
+| `sortKey`    | string | ❌   | 정렬 기준 (`name`, `createdAt`, `updatedAt`, ``) |
+| `sortType`   | string | ❌   | 정렬 방향 (`asc`, `desc`, ``)                    |
+| `page`       | number | ❌   | 페이지 번호 (기본값: 1)                          |
+| `size`       | number | ❌   | 페이지 크기 (기본값: 10)                         |
 
 ### 응답
 
@@ -121,9 +121,9 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 쿼리 파라미터
 
-|파라미터|타입|필수|설명|
-|---|---|---|---|
-|`targetId`|string|✅|고객 ID|
+| 파라미터   | 타입   | 필수 | 설명    |
+| ---------- | ------ | ---- | ------- |
+| `targetId` | string | ✅   | 고객 ID |
 
 ### 응답
 
@@ -278,10 +278,10 @@ Content-Type: application/json
 
 > [!note] 연락처 타입
 
-|타입|설명|
-|---|---|
-|`EMAIL`|이메일 주소|
-|`PHONE`|전화번호|
+| 타입    | 설명        |
+| ------- | ----------- |
+| `EMAIL` | 이메일 주소 |
+| `PHONE` | 전화번호    |
 
 ### 연락처 수정
 
@@ -400,48 +400,60 @@ GET /customer?sortKey=createdAt&sortType=desc
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.io';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // 고객 생성
 async function createCustomer(name) {
   try {
-    const response = await axios.post(`${BASE_URL}/customer/create/${encodeURIComponent(name)}`, {}, {
-      headers: {
-        'Authorization': API_KEY
+    const response = await axios.post(
+      `${BASE_URL}/customer/create/${encodeURIComponent(name)}`,
+      {},
+      {
+        headers: {
+          Authorization: API_KEY,
+        },
       }
-    });
-    
-    console.log('고객 생성 완료:', response.data);
+    );
+
+    console.log("고객 생성 완료:", response.data);
     return response.data;
   } catch (error) {
-    console.error('고객 생성 실패:', error.response?.data || error.message);
+    console.error("고객 생성 실패:", error.response?.data || error.message);
   }
 }
 
 // 고객 목록 조회
-async function getCustomerList(searchType = '', search = '', page = 1, size = 10) {
+async function getCustomerList(
+  searchType = "",
+  search = "",
+  page = 1,
+  size = 10
+) {
   try {
     const response = await axios.get(`${BASE_URL}/customer`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
         searchType,
         search,
-        sortKey: 'createdAt',
-        sortType: 'desc',
+        sortKey: "createdAt",
+        sortType: "desc",
         page,
-        size
-      }
+        size,
+      },
     });
-    
+
     console.log(`총 ${response.data.total}명의 고객`);
     return response.data;
   } catch (error) {
-    console.error('고객 목록 조회 실패:', error.response?.data || error.message);
+    console.error(
+      "고객 목록 조회 실패:",
+      error.response?.data || error.message
+    );
   }
 }
 
@@ -450,59 +462,70 @@ async function getCustomerDetail(customerId) {
   try {
     const response = await axios.get(`${BASE_URL}/customer/detail`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
-        targetId: customerId
-      }
+        targetId: customerId,
+      },
     });
-    
-    console.log('고객 상세 정보:', response.data);
+
+    console.log("고객 상세 정보:", response.data);
     return response.data;
   } catch (error) {
-    console.error('고객 상세 조회 실패:', error.response?.data || error.message);
+    console.error(
+      "고객 상세 조회 실패:",
+      error.response?.data || error.message
+    );
   }
 }
 
 // 고객 메모 추가
 async function addCustomerMemo(customerId, memo) {
   try {
-    const response = await axios.post(`${BASE_URL}/customer/memo`, {
-      targetId: customerId,
-      memo: memo
-    }, {
-      headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${BASE_URL}/customer/memo`,
+      {
+        targetId: customerId,
+        memo: memo,
+      },
+      {
+        headers: {
+          Authorization: API_KEY,
+          "Content-Type": "application/json",
+        },
       }
-    });
-    
-    console.log('메모 추가 완료:', response.data);
+    );
+
+    console.log("메모 추가 완료:", response.data);
     return response.data;
   } catch (error) {
-    console.error('메모 추가 실패:', error.response?.data || error.message);
+    console.error("메모 추가 실패:", error.response?.data || error.message);
   }
 }
 
 // 고객 연락처 추가
 async function addCustomerContact(customerId, type, value, desc) {
   try {
-    const response = await axios.post(`${BASE_URL}/customer/contact`, {
-      targetId: customerId,
-      type: type, // 'EMAIL' or 'PHONE'
-      value: value,
-      desc: desc
-    }, {
-      headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${BASE_URL}/customer/contact`,
+      {
+        targetId: customerId,
+        type: type, // 'EMAIL' or 'PHONE'
+        value: value,
+        desc: desc,
+      },
+      {
+        headers: {
+          Authorization: API_KEY,
+          "Content-Type": "application/json",
+        },
       }
-    });
-    
-    console.log('연락처 추가 완료:', response.data);
+    );
+
+    console.log("연락처 추가 완료:", response.data);
     return response.data;
   } catch (error) {
-    console.error('연락처 추가 실패:', error.response?.data || error.message);
+    console.error("연락처 추가 실패:", error.response?.data || error.message);
   }
 }
 
@@ -510,20 +533,20 @@ async function addCustomerContact(customerId, type, value, desc) {
 async function uploadCustomerIcon(customerId, file) {
   try {
     const formData = new FormData();
-    formData.append('targetId', customerId);
-    formData.append('file', file);
-    
+    formData.append("targetId", customerId);
+    formData.append("file", file);
+
     const response = await axios.post(`${BASE_URL}/customer/icon`, formData, {
       headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'multipart/form-data'
-      }
+        Authorization: API_KEY,
+        "Content-Type": "multipart/form-data",
+      },
     });
-    
-    console.log('아이콘 업로드 완료:', response.data);
+
+    console.log("아이콘 업로드 완료:", response.data);
     return response.data;
   } catch (error) {
-    console.error('아이콘 업로드 실패:', error.response?.data || error.message);
+    console.error("아이콘 업로드 실패:", error.response?.data || error.message);
   }
 }
 ```
@@ -534,7 +557,7 @@ async function uploadCustomerIcon(customerId, file) {
 import requests
 
 API_KEY = 'your-api-key-here'
-BASE_URL = 'https://api.crypted-pay.io'
+BASE_URL = 'https://api.crypted-pay.com'
 
 headers = {
     'Authorization': API_KEY,
@@ -544,10 +567,10 @@ headers = {
 # 고객 생성
 def create_customer(name):
     try:
-        response = requests.post(f'{BASE_URL}/customer/create/{name}', 
+        response = requests.post(f'{BASE_URL}/customer/create/{name}',
                                headers={'Authorization': API_KEY})
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"고객 생성 완료: {data['name']} (ID: {data['id']})")
         return data
@@ -564,13 +587,13 @@ def get_customer_list(search_type='', search='', page=1, size=10):
         'page': page,
         'size': size
     }
-    
+
     try:
-        response = requests.get(f'{BASE_URL}/customer', 
-                              headers={'Authorization': API_KEY}, 
+        response = requests.get(f'{BASE_URL}/customer',
+                              headers={'Authorization': API_KEY},
                               params=params)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"총 {data['total']}명의 고객")
         return data
@@ -583,12 +606,12 @@ def add_customer_memo(customer_id, memo):
         'targetId': customer_id,
         'memo': memo
     }
-    
+
     try:
-        response = requests.post(f'{BASE_URL}/customer/memo', 
+        response = requests.post(f'{BASE_URL}/customer/memo',
                                json=payload, headers=headers)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"메모 추가 완료: {memo}")
         return data
@@ -603,12 +626,12 @@ def add_customer_contact(customer_id, contact_type, value, desc):
         'value': value,
         'desc': desc
     }
-    
+
     try:
-        response = requests.post(f'{BASE_URL}/customer/contact', 
+        response = requests.post(f'{BASE_URL}/customer/contact',
                                json=payload, headers=headers)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"연락처 추가 완료: {value}")
         return data
@@ -621,13 +644,13 @@ def add_customer_contact(customer_id, contact_type, value, desc):
 ## ⚡ 주의사항
 
 > [!warning] 중요 사항
-> 
+>
 > 1. **인증 필수**: 모든 API 호출 시 `Authorization` 헤더에 유효한 API 키가 필요합니다.
 > 2. **권한 확인**: 파트너는 자신이 생성한 고객만 조회/수정할 수 있습니다.
 > 3. **파일 크기 제한**: 아이콘 업로드 시 최대 5MB까지 업로드 가능합니다.
 
 > [!tip] 팁
-> 
+>
 > - 고객 이름은 파트너 내에서 고유해야 합니다.
 > - 검색 시 이메일과 전화번호는 연락처 테이블에서 검색됩니다.
 > - 메모와 연락처는 무제한으로 추가할 수 있습니다.

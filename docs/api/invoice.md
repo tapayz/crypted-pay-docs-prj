@@ -30,17 +30,17 @@ Content-Type: application/json
 
 > **Request Field Description**
 
-|Field|Type|Required|Description|
-|---|---|---|---|
-|`customerName`|string|✅|Customer name (auto-created if customer doesn't exist)|
-|`title`|string|✅|Invoice title|
-|`amount`|string|✅|Expected cryptocurrency amount calculated by client|
-|`stdPrice`|string|✅|Exchange rate at request time|
-|`cashAssetId`|number|✅|Fiat currency asset ID (1: KRW, 2: USD)|
-|`cashAmount`|string|✅|Fiat currency amount|
-|`cryptoAssetId`|number|✅|Cryptocurrency asset ID|
-|`expiredDate`|number|✅|Expiration time (in seconds)|
-|`isNewAddress`|boolean|❌|Whether to generate new wallet address (default: false)|
+| Field           | Type    | Required | Description                                             |
+| --------------- | ------- | -------- | ------------------------------------------------------- |
+| `customerName`  | string  | ✅       | Customer name (auto-created if customer doesn't exist)  |
+| `title`         | string  | ✅       | Invoice title                                           |
+| `amount`        | string  | ✅       | Expected cryptocurrency amount calculated by client     |
+| `stdPrice`      | string  | ✅       | Exchange rate at request time                           |
+| `cashAssetId`   | number  | ✅       | Fiat currency asset ID (1: KRW, 2: USD)                 |
+| `cashAmount`    | string  | ✅       | Fiat currency amount                                    |
+| `cryptoAssetId` | number  | ✅       | Cryptocurrency asset ID                                 |
+| `expiredDate`   | number  | ✅       | Expiration time (in seconds)                            |
+| `isNewAddress`  | boolean | ❌       | Whether to generate new wallet address (default: false) |
 
 ### Response
 
@@ -73,7 +73,7 @@ Content-Type: application/json
       "network": "LEGAL"
     }
   },
-  "url": "https://pay.crypted-pay.io/550e8400-e29b-41d4-a716-446655440000"
+  "url": "https://pay.tapayz.io/550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
@@ -97,13 +97,13 @@ Authorization: <YOUR_API_KEY>
 
 > **Query Parameters**
 
-|Parameter|Type|Required|Description|
-|---|---|---|---|
-|`page`|number|❌|Page number (default: 1)|
-|`size`|number|❌|Page size (default: 10)|
-|`startAt`|string|❌|Start date (ISO 8601)|
-|`endAt`|string|❌|End date (ISO 8601)|
-|`customerName`|string|❌|Filter by customer name|
+| Parameter      | Type   | Required | Description              |
+| -------------- | ------ | -------- | ------------------------ |
+| `page`         | number | ❌       | Page number (default: 1) |
+| `size`         | number | ❌       | Page size (default: 10)  |
+| `startAt`      | string | ❌       | Start date (ISO 8601)    |
+| `endAt`        | string | ❌       | End date (ISO 8601)      |
+| `customerName` | string | ❌       | Filter by customer name  |
 
 ### Response
 
@@ -159,9 +159,9 @@ Authorization: <YOUR_API_KEY>
 
 > **Query Parameters**
 
-|Parameter|Type|Required|Description|
-|---|---|---|---|
-|`id`|string|✅|Invoice ID|
+| Parameter | Type   | Required | Description |
+| --------- | ------ | -------- | ----------- |
+| `id`      | string | ✅       | Invoice ID  |
 
 ### Response
 
@@ -220,15 +220,15 @@ Authorization: <YOUR_API_KEY>
 
 ### Status Values
 
-|Status|Description|
-|---|---|
-|`Ready`|Waiting for payment|
-|`Wait`|Waiting for processing|
-|`Pending`|Blockchain confirmation in progress|
-|`Complete`|Payment completed|
-|`Fail`|Payment failed|
-|`Reject`|Payment rejected|
-|`Cancel`|Payment canceled (expired)|
+| Status     | Description                         |
+| ---------- | ----------------------------------- |
+| `Ready`    | Waiting for payment                 |
+| `Wait`     | Waiting for processing              |
+| `Pending`  | Blockchain confirmation in progress |
+| `Complete` | Payment completed                   |
+| `Fail`     | Payment failed                      |
+| `Reject`   | Payment rejected                    |
+| `Cancel`   | Payment canceled (expired)          |
 
 ### Status Flow
 
@@ -335,37 +335,44 @@ Webhook events are sent to registered callback URLs when invoice status changes.
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.io';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // Create invoice
 async function createInvoice() {
   try {
-    const response = await axios.post(`${BASE_URL}/invoice/create`, {
-      customerName: 'John Doe',
-      title: 'USDT $100 Purchase',
-      amount: '74.074074',
-      stdPrice: '1350.500000',
-      cashAssetId: 1,
-      cashAmount: '100000.000000',
-      cryptoAssetId: 1001,
-      expiredDate: 1800,
-      isNewAddress: false
-    }, {
-      headers: {
-        'Authorization': API_KEY,
-        'Content-Type': 'application/json'
+    const response = await axios.post(
+      `${BASE_URL}/invoice/create`,
+      {
+        customerName: "John Doe",
+        title: "USDT $100 Purchase",
+        amount: "74.074074",
+        stdPrice: "1350.500000",
+        cashAssetId: 1,
+        cashAmount: "100000.000000",
+        cryptoAssetId: 1001,
+        expiredDate: 1800,
+        isNewAddress: false,
+      },
+      {
+        headers: {
+          Authorization: API_KEY,
+          "Content-Type": "application/json",
+        },
       }
-    });
+    );
 
-    console.log('Invoice created:', response.data.invoice.id);
-    console.log('Payment URL:', response.data.url);
+    console.log("Invoice created:", response.data.invoice.id);
+    console.log("Payment URL:", response.data.url);
 
     return response.data;
   } catch (error) {
-    console.error('Invoice creation failed:', error.response?.data || error.message);
+    console.error(
+      "Invoice creation failed:",
+      error.response?.data || error.message
+    );
   }
 }
 
@@ -374,22 +381,25 @@ async function getInvoiceList(page = 1, size = 10) {
   try {
     const response = await axios.get(`${BASE_URL}/invoice`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
         page,
         size,
-        startAt: '2025-09-01T00:00:00.000Z',
-        endAt: '2025-09-05T23:59:59.999Z'
-      }
+        startAt: "2025-09-01T00:00:00.000Z",
+        endAt: "2025-09-05T23:59:59.999Z",
+      },
     });
 
     console.log(`Total ${response.data.total} invoices`);
-    console.log('Invoice list:', response.data.list);
+    console.log("Invoice list:", response.data.list);
 
     return response.data;
   } catch (error) {
-    console.error('Invoice list query failed:', error.response?.data || error.message);
+    console.error(
+      "Invoice list query failed:",
+      error.response?.data || error.message
+    );
   }
 }
 
@@ -398,19 +408,22 @@ async function getInvoiceDetail(invoiceId) {
   try {
     const response = await axios.get(`${BASE_URL}/invoice/detail`, {
       headers: {
-        'Authorization': API_KEY
+        Authorization: API_KEY,
       },
       params: {
-        id: invoiceId
-      }
+        id: invoiceId,
+      },
     });
 
-    console.log('Invoice detail:', response.data);
-    console.log('Wallet address:', response.data.wallet.address);
+    console.log("Invoice detail:", response.data);
+    console.log("Wallet address:", response.data.wallet.address);
 
     return response.data;
   } catch (error) {
-    console.error('Invoice detail query failed:', error.response?.data || error.message);
+    console.error(
+      "Invoice detail query failed:",
+      error.response?.data || error.message
+    );
   }
 }
 ```

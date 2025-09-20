@@ -1,16 +1,16 @@
 # Webhook
 
-> [!info] 개요 Crypted-Pay의 Webhook 시스템은 결제 프로세스 중 발생하는 다양한 이벤트를 실시간으로 알려주는 HTTP 콜백 메커니즘입니다. 인보이스 상태 변경, 트랜잭션 생성/업데이트 등의 이벤트가 발생할 때마다 등록된 엔드포인트로 알림을 전송합니다.
+> [!info] 개요 Tapayz의 Webhook 시스템은 결제 프로세스 중 발생하는 다양한 이벤트를 실시간으로 알려주는 HTTP 콜백 메커니즘입니다. 인보이스 상태 변경, 트랜잭션 생성/업데이트 등의 이벤트가 발생할 때마다 등록된 엔드포인트로 알림을 전송합니다.
 
 ## 🔔 Webhook 종류
 
 ### 지원하는 이벤트
 
-|이벤트|콜백 URL|설명|
-|---|---|---|
-|**인보이스 업데이트**|`/callback/update-invoice`|인보이스 상태 변경 시 호출|
-|**트랜잭션 생성**|`/callback/create-transaction`|블록체인에 트랜잭션이 최초 기록될 때 호출|
-|**트랜잭션 업데이트**|`/callback/update-transaction`|트랜잭션 컨펌 완료 및 최종 상태 변경 시 호출|
+| 이벤트                | 콜백 URL                       | 설명                                         |
+| --------------------- | ------------------------------ | -------------------------------------------- |
+| **인보이스 업데이트** | `/callback/update-invoice`     | 인보이스 상태 변경 시 호출                   |
+| **트랜잭션 생성**     | `/callback/create-transaction` | 블록체인에 트랜잭션이 최초 기록될 때 호출    |
+| **트랜잭션 업데이트** | `/callback/update-transaction` | 트랜잭션 컨펌 완료 및 최종 상태 변경 시 호출 |
 
 ### 이벤트 흐름
 
@@ -25,7 +25,7 @@ sequenceDiagram
     Blockchain->>Platform: 트랜잭션 감지
     Platform->>Partner: create-transaction 호출
     Platform->>Partner: update-invoice 호출 (Pending)
-    
+
     Blockchain->>Platform: 컨펌 완료
     Platform->>Partner: update-transaction 호출
     Platform->>Partner: update-invoice 호출 (Complete)
@@ -49,11 +49,11 @@ sequenceDiagram
 
 ### 공통 필드
 
-|필드|타입|설명|
-|---|---|---|
-|`event`|string|이벤트 타입|
-|`timestamp`|string|이벤트 발생 시간 (ISO 8601)|
-|`data`|object|이벤트별 세부 데이터|
+| 필드        | 타입   | 설명                        |
+| ----------- | ------ | --------------------------- |
+| `event`     | string | 이벤트 타입                 |
+| `timestamp` | string | 이벤트 발생 시간 (ISO 8601) |
+| `data`      | object | 이벤트별 세부 데이터        |
 
 ---
 
@@ -66,12 +66,12 @@ sequenceDiagram
 **시그니처 생성 방법:**
 
 ```javascript
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const signature = crypto
-  .createHmac('sha256', WEBHOOK_SECRET)
+  .createHmac("sha256", WEBHOOK_SECRET)
   .update(JSON.stringify(payload))
-  .digest('hex');
+  .digest("hex");
 ```
 
 **검증 구현:**
@@ -79,25 +79,29 @@ const signature = crypto
 ```javascript
 function verifySignature(payload, signature, secret) {
   const hash = crypto
-    .createHmac('sha256', secret)
+    .createHmac("sha256", secret)
     .update(JSON.stringify(payload))
-    .digest('hex');
-  
+    .digest("hex");
+
   return crypto.timingSafeEqual(
-    Buffer.from(signature, 'hex'),
-    Buffer.from(hash, 'hex')
+    Buffer.from(signature, "hex"),
+    Buffer.from(hash, "hex")
   );
 }
 
 // 사용 예시
-app.post('/callback/*', (req, res) => {
-  const signature = req.headers['x-signature'];
-  const isValid = verifySignature(req.body, signature, process.env.WEBHOOK_SECRET);
-  
+app.post("/callback/*", (req, res) => {
+  const signature = req.headers["x-signature"];
+  const isValid = verifySignature(
+    req.body,
+    signature,
+    process.env.WEBHOOK_SECRET
+  );
+
   if (!isValid) {
-    return res.status(401).json({ error: 'Invalid signature' });
+    return res.status(401).json({ error: "Invalid signature" });
   }
-  
+
   // Webhook 처리 로직
 });
 ```
@@ -107,15 +111,15 @@ app.post('/callback/*', (req, res) => {
 특정 IP 주소에서만 Webhook을 수신하도록 제한:
 
 ```javascript
-const allowedIPs = ['52.78.123.45', '13.125.67.89']; // 플랫폼 서버 IP
+const allowedIPs = ["52.78.123.45", "13.125.67.89"]; // 플랫폼 서버 IP
 
-app.use('/callback', (req, res, next) => {
+app.use("/callback", (req, res, next) => {
   const clientIP = req.ip || req.connection.remoteAddress;
-  
+
   if (!allowedIPs.includes(clientIP)) {
-    return res.status(403).json({ error: 'Forbidden IP' });
+    return res.status(403).json({ error: "Forbidden IP" });
   }
-  
+
   next();
 });
 ```
@@ -131,30 +135,30 @@ app.use('/callback', (req, res, next) => {
 ```javascript
 const processedEvents = new Set();
 
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   // 이벤트 고유 식별자 생성
   const eventId = generateEventId(req.body);
-  
+
   if (processedEvents.has(eventId)) {
-    return res.status(200).json({ status: 'already_processed' });
+    return res.status(200).json({ status: "already_processed" });
   }
-  
+
   try {
     processEvent(req.body);
     processedEvents.add(eventId);
-    res.status(200).json({ status: 'ok' });
+    res.status(200).json({ status: "ok" });
   } catch (error) {
-    res.status(500).json({ error: 'Processing failed' });
+    res.status(500).json({ error: "Processing failed" });
   }
 });
 
 function generateEventId(payload) {
   // 이벤트 타입과 주요 식별자로 고유 ID 생성
   switch (payload.event) {
-    case 'invoice.updated':
+    case "invoice.updated":
       return `${payload.data.invoiceId}-${payload.data.state}-${payload.timestamp}`;
-    case 'transaction.created':
-    case 'transaction.updated':
+    case "transaction.created":
+    case "transaction.updated":
       return `${payload.data.id}-${payload.data.state}-${payload.timestamp}`;
     default:
       return `${payload.event}-${payload.timestamp}`;
@@ -167,19 +171,19 @@ function generateEventId(payload) {
 무거운 작업은 백그라운드로 분리하여 빠른 응답을 보장:
 
 ```javascript
-const Queue = require('bull'); // 또는 다른 큐 시스템
-const webhookQueue = new Queue('webhook processing');
+const Queue = require("bull"); // 또는 다른 큐 시스템
+const webhookQueue = new Queue("webhook processing");
 
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   // 빠른 응답
-  res.status(200).json({ status: 'received' });
-  
+  res.status(200).json({ status: "received" });
+
   // 백그라운드 처리
-  webhookQueue.add('process-webhook', req.body);
+  webhookQueue.add("process-webhook", req.body);
 });
 
 // 워커에서 실제 처리
-webhookQueue.process('process-webhook', async (job) => {
+webhookQueue.process("process-webhook", async (job) => {
   const payload = job.data;
   await processWebhookEvent(payload);
 });
@@ -195,15 +199,15 @@ async function processEventWithRetry(eventData, maxRetries = 3) {
       return { success: true };
     } catch (error) {
       console.error(`재시도 ${attempt}/${maxRetries} 실패:`, error);
-      
+
       if (attempt === maxRetries) {
         // 최종 실패 - 데드레터큐에 저장
         await saveToDeadLetterQueue(eventData, error);
         throw error;
       }
-      
+
       // 지수적 백오프 (1초, 2초, 4초...)
-      await new Promise(resolve => 
+      await new Promise((resolve) =>
         setTimeout(resolve, Math.pow(2, attempt) * 1000)
       );
     }
@@ -214,49 +218,47 @@ async function processEventWithRetry(eventData, maxRetries = 3) {
 ### 4. 로깅 및 모니터링
 
 ```javascript
-const winston = require('winston');
+const winston = require("winston");
 
 const logger = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.json()
   ),
-  transports: [
-    new winston.transports.File({ filename: 'webhook.log' })
-  ]
+  transports: [new winston.transports.File({ filename: "webhook.log" })],
 });
 
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   const startTime = Date.now();
   const payload = req.body;
-  
-  logger.info('Webhook 수신', {
+
+  logger.info("Webhook 수신", {
     event: payload.event,
     path: req.path,
-    userAgent: req.headers['user-agent'],
-    ip: req.ip
+    userAgent: req.headers["user-agent"],
+    ip: req.ip,
   });
-  
+
   try {
     processEvent(payload);
-    
+
     const duration = Date.now() - startTime;
-    logger.info('Webhook 처리 완료', {
+    logger.info("Webhook 처리 완료", {
       event: payload.event,
       duration: `${duration}ms`,
-      status: 'success'
+      status: "success",
     });
-    
-    res.status(200).json({ status: 'ok' });
+
+    res.status(200).json({ status: "ok" });
   } catch (error) {
-    logger.error('Webhook 처리 실패', {
+    logger.error("Webhook 처리 실패", {
       event: payload.event,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
-    
-    res.status(500).json({ error: 'Processing failed' });
+
+    res.status(500).json({ error: "Processing failed" });
   }
 });
 ```
@@ -280,24 +282,24 @@ ngrok http 3000
 **2. 테스트 서버 구성:**
 
 ```javascript
-const express = require('express');
+const express = require("express");
 const app = express();
 
 app.use(express.json());
 
 // 모든 Webhook 이벤트 로깅
-app.post('/callback/*', (req, res) => {
-  console.log('=== Webhook 수신 ===');
-  console.log('Path:', req.path);
-  console.log('Headers:', req.headers);
-  console.log('Body:', JSON.stringify(req.body, null, 2));
-  console.log('==================');
-  
-  res.status(200).json({ status: 'ok' });
+app.post("/callback/*", (req, res) => {
+  console.log("=== Webhook 수신 ===");
+  console.log("Path:", req.path);
+  console.log("Headers:", req.headers);
+  console.log("Body:", JSON.stringify(req.body, null, 2));
+  console.log("==================");
+
+  res.status(200).json({ status: "ok" });
 });
 
 app.listen(3000, () => {
-  console.log('테스트 서버가 포트 3000에서 실행 중');
+  console.log("테스트 서버가 포트 3000에서 실행 중");
 });
 ```
 
@@ -345,31 +347,31 @@ const metrics = {
   webhookReceived: 0,
   webhookProcessed: 0,
   webhookFailed: 0,
-  averageProcessingTime: 0
+  averageProcessingTime: 0,
 };
 
 // 메트릭 수집
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   const startTime = Date.now();
   metrics.webhookReceived++;
-  
+
   try {
     processEvent(req.body);
     metrics.webhookProcessed++;
-    
+
     const duration = Date.now() - startTime;
-    metrics.averageProcessingTime = 
+    metrics.averageProcessingTime =
       (metrics.averageProcessingTime + duration) / 2;
-    
-    res.status(200).json({ status: 'ok' });
+
+    res.status(200).json({ status: "ok" });
   } catch (error) {
     metrics.webhookFailed++;
-    res.status(500).json({ error: 'Processing failed' });
+    res.status(500).json({ error: "Processing failed" });
   }
 });
 
 // 메트릭 엔드포인트
-app.get('/metrics', (req, res) => {
+app.get("/metrics", (req, res) => {
   res.json(metrics);
 });
 ```
@@ -377,9 +379,9 @@ app.get('/metrics', (req, res) => {
 ### 헬스체크
 
 ```javascript
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   const health = {
-    status: 'healthy',
+    status: "healthy",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memory: process.memoryUsage(),
@@ -387,11 +389,16 @@ app.get('/health', (req, res) => {
       received: metrics.webhookReceived,
       processed: metrics.webhookProcessed,
       failed: metrics.webhookFailed,
-      successRate: metrics.webhookReceived > 0 ? 
-        (metrics.webhookProcessed / metrics.webhookReceived * 100).toFixed(2) : 0
-    }
+      successRate:
+        metrics.webhookReceived > 0
+          ? (
+              (metrics.webhookProcessed / metrics.webhookReceived) *
+              100
+            ).toFixed(2)
+          : 0,
+    },
   };
-  
+
   res.json(health);
 });
 ```
@@ -401,7 +408,7 @@ app.get('/health', (req, res) => {
 ## ⚠️ 주의사항
 
 > [!warning] 중요 사항
-> 
+>
 > 1. **응답 시간**: Webhook 핸들러는 **5초 이내**에 응답해야 합니다.
 > 2. **상태 코드**: 성공 시 반드시 **200** 상태 코드를 반환하세요.
 > 3. **재시도**: 실패 시 **최대 3회**까지 재시도됩니다.
@@ -409,7 +416,7 @@ app.get('/health', (req, res) => {
 > 5. **중복**: 동일한 이벤트가 여러 번 전송될 수 있습니다.
 
 > [!tip] 팁
-> 
+>
 > - 무거운 처리는 반드시 백그라운드 작업으로 분리하세요.
 > - 데이터베이스 트랜잭션을 사용하여 일관성을 보장하세요.
 > - 테스트 환경에서 충분히 검증 후 프로덕션에 적용하세요.

@@ -27,7 +27,7 @@ Authorization: <YOUR_API_KEY>
   },
   "fee": {
     "tether": "1356.750000",
-    "eth": "2663250.000000", 
+    "eth": "2663250.000000",
     "trx": "150.750000"
   }
 }
@@ -35,21 +35,21 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 응답 필드 설명
 
-|필드|타입|설명|
-|---|---|---|
-|`exchangeFeeRate`|string|플랫폼 수수료율 (소수점 표기)|
-|`krw`|string|KRW 기준 환율|
-|`krwWithFee`|string|수수료가 적용된 KRW 환율|
-|`origin`|object|각 암호화폐의 원본 시세 (KRW)|
-|`fee`|object|수수료가 적용된 각 암호화폐 시세 (KRW)|
+| 필드              | 타입   | 설명                                   |
+| ----------------- | ------ | -------------------------------------- |
+| `exchangeFeeRate` | string | 플랫폼 수수료율 (소수점 표기)          |
+| `krw`             | string | KRW 기준 환율                          |
+| `krwWithFee`      | string | 수수료가 적용된 KRW 환율               |
+| `origin`          | object | 각 암호화폐의 원본 시세 (KRW)          |
+| `fee`             | object | 수수료가 적용된 각 암호화폐 시세 (KRW) |
 
 **origin/fee 객체 내부 필드**
 
-|필드|설명|
-|---|---|
-|`tether`|USDT 가격 (TRC20/ERC20)|
-|`eth`|Ethereum 가격|
-|`trx`|Tron 가격|
+| 필드     | 설명                    |
+| -------- | ----------------------- |
+| `tether` | USDT 가격 (TRC20/ERC20) |
+| `eth`    | Ethereum 가격           |
+| `trx`    | Tron 가격               |
 
 ---
 
@@ -109,16 +109,16 @@ Authorization: <YOUR_API_KEY>
 
 > [!note] 응답 필드 설명
 
-|필드|타입|설명|
-|---|---|---|
-|`id`|number|자산 고유 ID|
-|`type`|string|자산 유형 (`CASH`, `COIN`, `TOKEN`)|
-|`name`|string|자산 전체 이름|
-|`symbol`|string|자산 심볼 (예: BTC, ETH, USDT)|
-|`network`|string|블록체인 네트워크 (`BTC`, `ETH`, `TRX`, `LEGAL`)|
-|`digit`|number|소수점 자릿수|
-|`price`|string|현재 가격 (KRW 기준)|
-|`isActive`|boolean|활성화 상태|
+| 필드       | 타입    | 설명                                             |
+| ---------- | ------- | ------------------------------------------------ |
+| `id`       | number  | 자산 고유 ID                                     |
+| `type`     | string  | 자산 유형 (`CASH`, `COIN`, `TOKEN`)              |
+| `name`     | string  | 자산 전체 이름                                   |
+| `symbol`   | string  | 자산 심볼 (예: BTC, ETH, USDT)                   |
+| `network`  | string  | 블록체인 네트워크 (`BTC`, `ETH`, `TRX`, `LEGAL`) |
+| `digit`    | number  | 소수점 자릿수                                    |
+| `price`    | string  | 현재 가격 (KRW 기준)                             |
+| `isActive` | boolean | 활성화 상태                                      |
 
 ---
 
@@ -226,20 +226,20 @@ Authorization: <YOUR_API_KEY>
 
 ### 자산 유형
 
-|유형|설명|예시|
-|---|---|---|
-|`CASH`|법정화폐|KRW, USD|
-|`COIN`|메인넷 코인|BTC, ETH, TRX|
-|`TOKEN`|토큰|USDT, USDC|
+| 유형    | 설명        | 예시          |
+| ------- | ----------- | ------------- |
+| `CASH`  | 법정화폐    | KRW, USD      |
+| `COIN`  | 메인넷 코인 | BTC, ETH, TRX |
+| `TOKEN` | 토큰        | USDT, USDC    |
 
 ### 지원 네트워크
 
-|네트워크|설명|지원 자산|
-|---|---|---|
-|`LEGAL`|법정화폐|KRW, USD|
-|`BTC`|비트코인 네트워크|BTC|
-|`ETH`|이더리움 네트워크|ETH, USDT-ERC20|
-|`TRX`|트론 네트워크|TRX, USDT-TRC20|
+| 네트워크 | 설명              | 지원 자산       |
+| -------- | ----------------- | --------------- |
+| `LEGAL`  | 법정화폐          | KRW, USD        |
+| `BTC`    | 비트코인 네트워크 | BTC             |
+| `ETH`    | 이더리움 네트워크 | ETH, USDT-ERC20 |
+| `TRX`    | 트론 네트워크     | TRX, USDT-TRC20 |
 
 ---
 
@@ -274,26 +274,26 @@ Authorization: <YOUR_API_KEY>
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.com';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // 실시간 시세 조회
 async function getPrice() {
   try {
     const response = await axios.get(`${BASE_URL}/asset/price`, {
       headers: {
-        'Authorization': API_KEY
-      }
+        Authorization: API_KEY,
+      },
     });
-    
-    console.log('현재 USDT 가격:', response.data.origin.tether);
-    console.log('수수료 포함 USDT 가격:', response.data.fee.tether);
-    
+
+    console.log("현재 USDT 가격:", response.data.origin.tether);
+    console.log("수수료 포함 USDT 가격:", response.data.fee.tether);
+
     return response.data;
   } catch (error) {
-    console.error('가격 조회 실패:', error.response?.data || error.message);
+    console.error("가격 조회 실패:", error.response?.data || error.message);
   }
 }
 
@@ -302,14 +302,17 @@ async function getCryptoAssets() {
   try {
     const response = await axios.get(`${BASE_URL}/asset/crypto`, {
       headers: {
-        'Authorization': API_KEY
-      }
+        Authorization: API_KEY,
+      },
     });
-    
-    console.log('지원 암호화폐:', response.data);
+
+    console.log("지원 암호화폐:", response.data);
     return response.data;
   } catch (error) {
-    console.error('암호화폐 목록 조회 실패:', error.response?.data || error.message);
+    console.error(
+      "암호화폐 목록 조회 실패:",
+      error.response?.data || error.message
+    );
   }
 }
 ```
@@ -331,21 +334,21 @@ def get_price():
     try:
         response = requests.get(f'{BASE_URL}/asset/price', headers=headers)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"현재 USDT 가격: {data['origin']['tether']}")
         print(f"수수료 포함 USDT 가격: {data['fee']['tether']}")
-        
+
         return data
     except requests.exceptions.RequestException as e:
         print(f"가격 조회 실패: {e}")
 
-# 지원 암호화폐 목록 조회  
+# 지원 암호화폐 목록 조회
 def get_crypto_assets():
     try:
         response = requests.get(f'{BASE_URL}/asset/crypto', headers=headers)
         response.raise_for_status()
-        
+
         data = response.json()
         print(f"지원 암호화폐: {data}")
         return data
@@ -358,13 +361,13 @@ def get_crypto_assets():
 ## ⚡ 주의사항
 
 > [!warning] 중요 사항
-> 
+>
 > 1. **인증 필수**: 모든 API 호출 시 `Authorization` 헤더에 유효한 API 키가 필요합니다.
 > 2. **권한 제한**: 일부 API는 Master 권한이 필요할 수 있습니다.
 > 3. **가격 변동성**: 암호화폐 가격은 실시간으로 변동되므로, 결제 시점의 가격과 차이가 있을 수 있습니다.
 
 > [!tip] 팁
-> 
+>
 > - `fee` 객체의 가격은 플랫폼 수수료가 적용된 가격입니다.
 > - Rate Limiting이 있을 수 있으니 과도한 요청은 피해주세요.
 

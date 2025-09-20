@@ -1,7 +1,7 @@
 {
-  "name": "crypted-pay-docs",
+  "name": "tapayz-docs",
   "version": "1.0.0",
-  "description": "Crypted-Pay API Documentation with VitePress",
+  "description": "Tapayz API Documentation with VitePress",
   "type": "module",
   "scripts": {
     "dev": "vitepress dev docs --port 5000",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tapayz/crypted-pay-docs"
+    "url": "https://github.com/tapayz/tapayz-docs"
   },
   "keywords": [
     "cryptocurrency",
@@ -27,6 +27,6 @@
     "documentation",
     "vitepress"
   ],
-  "author": "TapayZ",
+  "author": "Tapayz",
   "license": "MIT"
 }

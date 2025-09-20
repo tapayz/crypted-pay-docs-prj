@@ -1,6 +1,6 @@
-# Crypted-Pay Introduction
+# Tapayz Introduction
 
-**Crypted-Pay** is a service that enables anyone to easily accept cryptocurrency payments.
+**Tapayz** is a service that enables anyone to easily accept cryptocurrency payments.
 You can obtain an **API KEY** through a simple registration process, and reliably use all services with just member creation and invoice requests.
 
 ---
@@ -23,11 +23,11 @@ You can obtain an **API KEY** through a simple registration process, and reliabl
 
 ## Service Architecture
 
-The Crypted-Pay payment flow proceeds as follows:
+The Tapayz payment flow proceeds as follows:
 
 1. Customer requests payment
 2. Merchant server calls **Invoice Generation API**
-3. Provides payment page including Crypted-Pay wallet address
+3. Provides payment page including Tapayz wallet address
 4. Customer sends cryptocurrency
 5. Transaction confirmation on blockchain network
 6. Payment completion and Webhook notification
@@ -56,11 +56,12 @@ The Crypted-Pay payment flow proceeds as follows:
 ## Security Guidelines
 
 - **API Key Management** :
+
   - Issued keys must be stored securely to prevent external exposure.
   - Can be immediately revoked and reissued when necessary
 
 - **Webhook Security** :
-  - Webhooks sent from Crypted-Pay can be verified for forgery through **signature** verification
+  - Webhooks sent from Tapayz can be verified for forgery through **signature** verification
   - Refer to [Webhook Guide](./webhook/) for examples
 
 ---

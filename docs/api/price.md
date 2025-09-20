@@ -35,21 +35,21 @@ Authorization: <YOUR_API_KEY>
 
 > **Response Field Description**
 
-|Field|Type|Description|
-|---|---|---|
-|`exchangeFeeRate`|string|Platform fee rate (decimal notation)|
-|`krw`|string|KRW exchange rate|
-|`krwWithFee`|string|KRW exchange rate with fees applied|
-|`origin`|object|Original price of each cryptocurrency (KRW)|
-|`fee`|object|Price of each cryptocurrency with fees applied (KRW)|
+| Field             | Type   | Description                                          |
+| ----------------- | ------ | ---------------------------------------------------- |
+| `exchangeFeeRate` | string | Platform fee rate (decimal notation)                 |
+| `krw`             | string | KRW exchange rate                                    |
+| `krwWithFee`      | string | KRW exchange rate with fees applied                  |
+| `origin`          | object | Original price of each cryptocurrency (KRW)          |
+| `fee`             | object | Price of each cryptocurrency with fees applied (KRW) |
 
 **Fields inside origin/fee objects**
 
-|Field|Description|
-|---|---|
-|`tether`|USDT price (TRC20/ERC20)|
-|`eth`|Ethereum price|
-|`trx`|Tron price|
+| Field    | Description              |
+| -------- | ------------------------ |
+| `tether` | USDT price (TRC20/ERC20) |
+| `eth`    | Ethereum price           |
+| `trx`    | Tron price               |
 
 ---
 
@@ -109,16 +109,16 @@ Authorization: <YOUR_API_KEY>
 
 > **Response Field Description**
 
-|Field|Type|Description|
-|---|---|---|
-|`id`|number|Asset unique ID|
-|`type`|string|Asset type (`CASH`, `COIN`, `TOKEN`)|
-|`name`|string|Asset full name|
-|`symbol`|string|Asset symbol (e.g., BTC, ETH, USDT)|
-|`network`|string|Blockchain network (`BTC`, `ETH`, `TRX`, `LEGAL`)|
-|`digit`|number|Decimal places|
-|`price`|string|Current price (KRW basis)|
-|`isActive`|boolean|Active status|
+| Field      | Type    | Description                                       |
+| ---------- | ------- | ------------------------------------------------- |
+| `id`       | number  | Asset unique ID                                   |
+| `type`     | string  | Asset type (`CASH`, `COIN`, `TOKEN`)              |
+| `name`     | string  | Asset full name                                   |
+| `symbol`   | string  | Asset symbol (e.g., BTC, ETH, USDT)               |
+| `network`  | string  | Blockchain network (`BTC`, `ETH`, `TRX`, `LEGAL`) |
+| `digit`    | number  | Decimal places                                    |
+| `price`    | string  | Current price (KRW basis)                         |
+| `isActive` | boolean | Active status                                     |
 
 ---
 
@@ -126,20 +126,20 @@ Authorization: <YOUR_API_KEY>
 
 ### Asset Types
 
-|Type|Description|Examples|
-|---|---|---|
-|`CASH`|Fiat currency|KRW, USD|
-|`COIN`|Mainnet coins|BTC, ETH, TRX|
-|`TOKEN`|Tokens|USDT, USDC|
+| Type    | Description   | Examples      |
+| ------- | ------------- | ------------- |
+| `CASH`  | Fiat currency | KRW, USD      |
+| `COIN`  | Mainnet coins | BTC, ETH, TRX |
+| `TOKEN` | Tokens        | USDT, USDC    |
 
 ### Supported Networks
 
-|Network|Description|Supported Assets|
-|---|---|---|
-|`LEGAL`|Fiat currency|KRW, USD|
-|`BTC`|Bitcoin network|BTC|
-|`ETH`|Ethereum network|ETH, USDT-ERC20|
-|`TRX`|Tron network|TRX, USDT-TRC20|
+| Network | Description      | Supported Assets |
+| ------- | ---------------- | ---------------- |
+| `LEGAL` | Fiat currency    | KRW, USD         |
+| `BTC`   | Bitcoin network  | BTC              |
+| `ETH`   | Ethereum network | ETH, USDT-ERC20  |
+| `TRX`   | Tron network     | TRX, USDT-TRC20  |
 
 ---
 
@@ -174,26 +174,26 @@ Authorization: <YOUR_API_KEY>
 ### Node.js (axios)
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = 'your-api-key-here';
-const BASE_URL = 'https://api.crypted-pay.io';
+const API_KEY = "your-api-key-here";
+const BASE_URL = "https://api.crypted-pay.com";
 
 // Real-time price query
 async function getPrice() {
   try {
     const response = await axios.get(`${BASE_URL}/asset/price`, {
       headers: {
-        'Authorization': API_KEY
-      }
+        Authorization: API_KEY,
+      },
     });
 
-    console.log('Current USDT price:', response.data.origin.tether);
-    console.log('USDT price with fee:', response.data.fee.tether);
+    console.log("Current USDT price:", response.data.origin.tether);
+    console.log("USDT price with fee:", response.data.fee.tether);
 
     return response.data;
   } catch (error) {
-    console.error('Price query failed:', error.response?.data || error.message);
+    console.error("Price query failed:", error.response?.data || error.message);
   }
 }
 
@@ -202,14 +202,17 @@ async function getCryptoAssets() {
   try {
     const response = await axios.get(`${BASE_URL}/asset/crypto`, {
       headers: {
-        'Authorization': API_KEY
-      }
+        Authorization: API_KEY,
+      },
     });
 
-    console.log('Supported cryptocurrencies:', response.data);
+    console.log("Supported cryptocurrencies:", response.data);
     return response.data;
   } catch (error) {
-    console.error('Crypto asset list query failed:', error.response?.data || error.message);
+    console.error(
+      "Crypto asset list query failed:",
+      error.response?.data || error.message
+    );
   }
 }
 ```

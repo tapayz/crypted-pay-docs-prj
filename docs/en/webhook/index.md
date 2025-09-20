@@ -1,16 +1,16 @@
 # Webhook
 
-> **Overview**: Crypted-Pay's Webhook system is an HTTP callback mechanism that provides real-time notifications of various events occurring during the payment process. Whenever events such as invoice status changes, transaction creation/updates occur, notifications are sent to registered endpoints.
+> **Overview**: Tapayz's Webhook system is an HTTP callback mechanism that provides real-time notifications of various events occurring during the payment process. Whenever events such as invoice status changes, transaction creation/updates occur, notifications are sent to registered endpoints.
 
 ## 🔔 Webhook Types
 
 ### Supported Events
 
-|Event|Callback URL|Description|
-|---|---|---|
-|**Invoice Update**|`/callback/update-invoice`|Called when invoice status changes|
-|**Transaction Creation**|`/callback/create-transaction`|Called when transaction is first recorded on blockchain|
-|**Transaction Update**|`/callback/update-transaction`|Called when transaction confirmation is completed and final status changes|
+| Event                    | Callback URL                   | Description                                                                |
+| ------------------------ | ------------------------------ | -------------------------------------------------------------------------- |
+| **Invoice Update**       | `/callback/update-invoice`     | Called when invoice status changes                                         |
+| **Transaction Creation** | `/callback/create-transaction` | Called when transaction is first recorded on blockchain                    |
+| **Transaction Update**   | `/callback/update-transaction` | Called when transaction confirmation is completed and final status changes |
 
 ### Event Flow
 
@@ -49,11 +49,11 @@ All Webhook events follow this basic structure:
 
 ### Common Fields
 
-|Field|Type|Description|
-|---|---|---|
-|`event`|string|Event type|
-|`timestamp`|string|Event occurrence time (ISO 8601)|
-|`data`|object|Event-specific detailed data|
+| Field       | Type   | Description                      |
+| ----------- | ------ | -------------------------------- |
+| `event`     | string | Event type                       |
+| `timestamp` | string | Event occurrence time (ISO 8601) |
+| `data`      | object | Event-specific detailed data     |
 
 ---
 
@@ -66,12 +66,12 @@ All Webhook events follow this basic structure:
 **Signature Generation Method:**
 
 ```javascript
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const signature = crypto
-  .createHmac('sha256', WEBHOOK_SECRET)
+  .createHmac("sha256", WEBHOOK_SECRET)
   .update(JSON.stringify(payload))
-  .digest('hex');
+  .digest("hex");
 ```
 
 **Verification Implementation:**
@@ -79,23 +79,27 @@ const signature = crypto
 ```javascript
 function verifySignature(payload, signature, secret) {
   const hash = crypto
-    .createHmac('sha256', secret)
+    .createHmac("sha256", secret)
     .update(JSON.stringify(payload))
-    .digest('hex');
+    .digest("hex");
 
   return crypto.timingSafeEqual(
-    Buffer.from(signature, 'hex'),
-    Buffer.from(hash, 'hex')
+    Buffer.from(signature, "hex"),
+    Buffer.from(hash, "hex")
   );
 }
 
 // Usage example
-app.post('/callback/*', (req, res) => {
-  const signature = req.headers['x-signature'];
-  const isValid = verifySignature(req.body, signature, process.env.WEBHOOK_SECRET);
+app.post("/callback/*", (req, res) => {
+  const signature = req.headers["x-signature"];
+  const isValid = verifySignature(
+    req.body,
+    signature,
+    process.env.WEBHOOK_SECRET
+  );
 
   if (!isValid) {
-    return res.status(401).json({ error: 'Invalid signature' });
+    return res.status(401).json({ error: "Invalid signature" });
   }
 
   // Webhook processing logic
@@ -107,13 +111,13 @@ app.post('/callback/*', (req, res) => {
 Restrict Webhook reception to specific IP addresses only:
 
 ```javascript
-const allowedIPs = ['52.78.123.45', '13.125.67.89']; // Platform server IPs
+const allowedIPs = ["52.78.123.45", "13.125.67.89"]; // Platform server IPs
 
-app.use('/callback', (req, res, next) => {
+app.use("/callback", (req, res, next) => {
   const clientIP = req.ip || req.connection.remoteAddress;
 
   if (!allowedIPs.includes(clientIP)) {
-    return res.status(403).json({ error: 'Forbidden IP' });
+    return res.status(403).json({ error: "Forbidden IP" });
   }
 
   next();
@@ -131,20 +135,20 @@ Since the same event may be sent multiple times, ensure idempotency:
 ```javascript
 const processedEvents = new Set();
 
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   // Generate unique event identifier
   const eventId = generateEventId(req.body);
 
   if (processedEvents.has(eventId)) {
-    return res.status(200).json({ status: 'already_processed' });
+    return res.status(200).json({ status: "already_processed" });
   }
 
   try {
     processEvent(req.body);
     processedEvents.add(eventId);
-    res.status(200).json({ status: 'ok' });
+    res.status(200).json({ status: "ok" });
   } catch (error) {
-    res.status(500).json({ error: 'Processing failed' });
+    res.status(500).json({ error: "Processing failed" });
   }
 });
 ```
@@ -154,19 +158,19 @@ app.post('/callback/*', (req, res) => {
 Separate heavy operations to background to ensure fast response:
 
 ```javascript
-const Queue = require('bull'); // or other queue system
-const webhookQueue = new Queue('webhook processing');
+const Queue = require("bull"); // or other queue system
+const webhookQueue = new Queue("webhook processing");
 
-app.post('/callback/*', (req, res) => {
+app.post("/callback/*", (req, res) => {
   // Fast response
-  res.status(200).json({ status: 'received' });
+  res.status(200).json({ status: "received" });
 
   // Background processing
-  webhookQueue.add('process-webhook', req.body);
+  webhookQueue.add("process-webhook", req.body);
 });
 
 // Actual processing in worker
-webhookQueue.process('process-webhook', async (job) => {
+webhookQueue.process("process-webhook", async (job) => {
   const payload = job.data;
   await processWebhookEvent(payload);
 });
